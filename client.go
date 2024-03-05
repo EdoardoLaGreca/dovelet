@@ -3,13 +3,13 @@ package pigeon
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"os"
+
 	"net/http"
 	"net/url"
 
-	"golang.org/x/oauth2/google"
 	vision "google.golang.org/api/vision/v1"
 
 	"github.com/kaneshin/pigeon/credentials"
@@ -39,7 +39,7 @@ func New(c *Config, httpClient ...*http.Client) (*Client, error) {
 
 	// Use HTTP Client if assigned
 	if len(httpClient) > 0 {
-		srv, err := vision.New(httpClient[0])
+		srv, err := vision.NewService(context.Background())
 		if err != nil {
 			return nil, fmt.Errorf("Unable to retrieve vision Client %v", err)
 		}
@@ -54,19 +54,19 @@ func New(c *Config, httpClient ...*http.Client) (*Client, error) {
 		c.Credentials = credentials.NewApplicationCredentials("")
 	}
 
-	creds, err := c.Credentials.Get()
-	if err != nil {
-		return nil, err
-	}
-	b, err := json.Marshal(creds)
+	// creds, err := c.Credentials.Get()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// b, err := json.Marshal(creds)
 
-	config, err := google.JWTConfigFromJSON(b, vision.CloudPlatformScope)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to parse client secret file to config: %v", err)
-	}
-	client := config.Client(context.Background())
+	// config, err := google.JWTConfigFromJSON(b, vision.CloudPlatformScope)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("Unable to parse client secret file to config: %v", err)
+	// }
+	// client := config.Client(context.Background())
 
-	srv, err := vision.New(client)
+	srv, err := vision.NewService(context.Background())
 	if err != nil {
 		return nil, fmt.Errorf("Unable to retrieve vision Client %v", err)
 	}
@@ -126,14 +126,14 @@ func (c Client) NewAnnotateImageRequest(v interface{}, features ...*vision.Featu
 			if resp.StatusCode >= http.StatusBadRequest {
 				return nil, http.ErrMissingFile
 			}
-			body, err := ioutil.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
 			if err != nil {
 				return nil, err
 			}
 			return c.NewAnnotateImageRequest(body, features...)
 		}
 		// filepath
-		b, err := ioutil.ReadFile(v.(string))
+		b, err := os.ReadFile(v.(string))
 		if err != nil {
 			return nil, err
 		}
