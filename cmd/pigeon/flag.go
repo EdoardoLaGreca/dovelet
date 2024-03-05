@@ -35,7 +35,7 @@ func DetectionsParse(args []string) *Detections {
 	logoDetection := f.Bool("logo", false, "This flag specifies the logo detection of the feature")
 	labelDetection := f.Bool("label", false, "This flag specifies the label detection of the feature")
 	textDetection := f.Bool("text", false, "This flag specifies the text detection (OCR) of the feature")
-	docTextDetection := f.Bool("doc", false, "Use document text detection (OCR)")
+	docTextDetection := f.Bool("doc", false, "This flag specifies the document text detection (OCR) of the feature")
 	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
 	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
 	f.Usage = func() {
