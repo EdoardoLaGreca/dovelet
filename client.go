@@ -41,7 +41,7 @@ func New(c *Config, httpClient ...*http.Client) (*Client, error) {
 	if len(httpClient) > 0 {
 		srv, err := vision.NewService(context.Background())
 		if err != nil {
-			return nil, fmt.Errorf("Unable to retrieve vision Client %v", err)
+			return nil, fmt.Errorf("unable to retrieve vision Client %v", err)
 		}
 		return &Client{
 			config:  c,
@@ -68,7 +68,7 @@ func New(c *Config, httpClient ...*http.Client) (*Client, error) {
 
 	srv, err := vision.NewService(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("Unable to retrieve vision Client %v", err)
+		return nil, fmt.Errorf("unable to retrieve vision Client %v", err)
 	}
 
 	return &Client{
@@ -98,12 +98,12 @@ func (c Client) NewBatchAnnotateImageRequest(list []string, features ...*vision.
 
 // NewAnnotateImageRequest returns a pointer to a new vision's AnnotateImagesRequest.
 func (c Client) NewAnnotateImageRequest(v interface{}, features ...*vision.Feature) (*vision.AnnotateImageRequest, error) {
-	switch v.(type) {
+	switch v := v.(type) {
 	case []byte:
 		// base64
-		return NewAnnotateImageContentRequest(v.([]byte), features...)
+		return NewAnnotateImageContentRequest(v, features...)
 	case string:
-		u, err := url.Parse(v.(string))
+		u, err := url.Parse(v)
 		if err != nil {
 			return nil, err
 		}
@@ -133,7 +133,7 @@ func (c Client) NewAnnotateImageRequest(v interface{}, features ...*vision.Featu
 			return c.NewAnnotateImageRequest(body, features...)
 		}
 		// filepath
-		b, err := os.ReadFile(v.(string))
+		b, err := os.ReadFile(v)
 		if err != nil {
 			return nil, err
 		}
