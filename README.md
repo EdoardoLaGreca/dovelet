@@ -20,7 +20,7 @@ To generate the credentials file, please, refer to [this documentation page](htt
 `pigeon` provides the command-line tools.
 
 ```shell
-$ go get github.com/kaneshin/pigeon/cmd/...
+$ go install github.com/kaneshin/pigeon/cmd/pigeon@latest
 ```
 
 Make sure that `pigeon` was installed correctly:
