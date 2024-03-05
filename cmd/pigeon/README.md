@@ -16,7 +16,7 @@ $ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
 Type the following line to install `pigeon`.
 
 ```shell
-$ go get github.com/kaneshin/pigeon/cmd/pigeon
+$ go install github.com/kaneshin/pigeon/cmd/pigeon@latest
 ```
 
 Make sure that `pigeon` was installed correctly:
