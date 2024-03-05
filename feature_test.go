@@ -15,6 +15,7 @@ func TestDetectionType(t *testing.T) {
 	assert.Equal("LOGO_DETECTION", DetectionType(LogoDetection))
 	assert.Equal("LABEL_DETECTION", DetectionType(LabelDetection))
 	assert.Equal("TEXT_DETECTION", DetectionType(TextDetection))
+	// TODO: add for DocumentTextDetection
 	assert.Equal("SAFE_SEARCH_DETECTION", DetectionType(SafeSearchDetection))
 	assert.Equal("IMAGE_PROPERTIES", DetectionType(ImageProperties))
 	assert.Equal("", DetectionType(-1))

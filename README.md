@@ -117,6 +117,8 @@ func DetectionType(d int) string {
 		return "LABEL_DETECTION"
 	case TextDetection:
 		return "TEXT_DETECTION"
+	case DocumentTextDetection:
+		return "DOCUMENT_TEXT_DETECTION"
 	case SafeSearchDetection:
 		return "SAFE_SEARCH_DETECTION"
 	case ImageProperties:

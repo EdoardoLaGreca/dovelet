@@ -19,6 +19,7 @@ type Detections struct {
 	logo            bool
 	label           bool
 	text            bool
+	docText         bool
 	safeSearch      bool
 	imageProperties bool
 	args            []string
@@ -34,6 +35,7 @@ func DetectionsParse(args []string) *Detections {
 	logoDetection := f.Bool("logo", false, "This flag specifies the logo detection of the feature")
 	labelDetection := f.Bool("label", false, "This flag specifies the label detection of the feature")
 	textDetection := f.Bool("text", false, "This flag specifies the text detection (OCR) of the feature")
+	docTextDetection := f.Bool("doc", false, "Use document text detection (OCR)")
 	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
 	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
 	f.Usage = func() {
@@ -46,6 +48,7 @@ func DetectionsParse(args []string) *Detections {
 		logo:            *logoDetection,
 		label:           *labelDetection,
 		text:            *textDetection,
+		docText:         *docTextDetection,
 		safeSearch:      *safeSearchDetection,
 		imageProperties: *imageProperties,
 		flag:            f,
@@ -79,6 +82,9 @@ func (d *Detections) Features() []*vision.Feature {
 	}
 	if d.text {
 		list = append(list, pigeon.TextDetection)
+	}
+	if d.docText {
+		list = append(list, pigeon.DocumentTextDetection)
 	}
 	if d.safeSearch {
 		list = append(list, pigeon.SafeSearchDetection)

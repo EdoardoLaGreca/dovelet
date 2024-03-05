@@ -4,6 +4,7 @@ import (
 	vision "google.golang.org/api/vision/v1"
 )
 
+// TODO: complete missing text in comments
 const (
 	// TypeUnspecified - Unspecified feature type.
 	TypeUnspecified = iota
