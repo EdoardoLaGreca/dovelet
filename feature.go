@@ -1,13 +1,15 @@
 package pigeon
 
 import (
-	vision "google.golang.org/api/vision/v1"
+	"cloud.google.com/go/vision/v2/apiv1/visionpb"
 )
+
+type DetectionFeature int
 
 // TODO: complete missing text in comments
 const (
 	// TypeUnspecified - Unspecified feature type.
-	TypeUnspecified = iota
+	TypeUnspecified DetectionFeature = iota
 	// FaceDetection - Run face detection.
 	FaceDetection
 	// LandmarkDetection - Run landmark detection.
@@ -27,7 +29,7 @@ const (
 )
 
 // DetectionType returns a value of detection type.
-func DetectionType(d int) string {
+func (d DetectionFeature) String() string {
 	switch d {
 	case TypeUnspecified:
 		return "TYPE_UNSPECIFIED"
@@ -51,7 +53,31 @@ func DetectionType(d int) string {
 	return ""
 }
 
-// NewFeature returns a pointer to a new vision's Feature object.
-func NewFeature(d int) *vision.Feature {
-	return &vision.Feature{Type: DetectionType(d)}
+func (d DetectionFeature) VisionFeature() visionpb.Feature_Type {
+	switch d {
+	case TypeUnspecified:
+		return visionpb.Feature_TYPE_UNSPECIFIED
+	case FaceDetection:
+		return visionpb.Feature_FACE_DETECTION
+	case LandmarkDetection:
+		return visionpb.Feature_LANDMARK_DETECTION
+	case LogoDetection:
+		return visionpb.Feature_LOGO_DETECTION
+	case LabelDetection:
+		return visionpb.Feature_LABEL_DETECTION
+	case TextDetection:
+		return visionpb.Feature_TEXT_DETECTION
+	case DocumentTextDetection:
+		return visionpb.Feature_DOCUMENT_TEXT_DETECTION
+	case SafeSearchDetection:
+		return visionpb.Feature_SAFE_SEARCH_DETECTION
+	case ImageProperties:
+		return visionpb.Feature_IMAGE_PROPERTIES
+	}
+	return visionpb.Feature_TYPE_UNSPECIFIED
 }
+
+// NewFeature returns a pointer to a new vision's Feature object.
+// func NewFeature(d int) *vision.Feature {
+// 	return &vision.Feature{Type: DetectionType(d)}
+// }

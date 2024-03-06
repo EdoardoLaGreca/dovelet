@@ -3,13 +3,7 @@ package main
 import (
 	"flag"
 
-	vision "google.golang.org/api/vision/v1"
-
-	"github.com/kaneshin/pigeon"
-)
-
-const (
-	defaultDetection = pigeon.LabelDetection
+	"github.com/EdoardoLaGreca/pigeon"
 )
 
 // Detections type
@@ -22,10 +16,10 @@ type Detections struct {
 	docText         bool
 	safeSearch      bool
 	imageProperties bool
-	args            []string
 	flag            *flag.FlagSet
 }
 
+// TODO: rephrase flag descriptions
 // DetectionsParse parses the command-line flags from arguments and returns
 // a new pointer of a Detections object..
 func DetectionsParse(args []string) *Detections {
@@ -65,41 +59,25 @@ func (d *Detections) Usage() {
 	d.flag.Usage()
 }
 
-// Features returns a slice of pointers of vision.Feature.
-func (d *Detections) Features() []*vision.Feature {
-	list := []int{}
-	if d.face {
-		list = append(list, pigeon.FaceDetection)
+// Feature returns the feature specified as a flag.
+func (d *Detections) Feature() pigeon.DetectionFeature {
+	switch {
+	case d.face:
+		return pigeon.FaceDetection
+	case d.landmark:
+		return pigeon.LandmarkDetection
+	case d.logo:
+		return pigeon.LogoDetection
+	case d.label:
+		return pigeon.LabelDetection
+	case d.text:
+		return pigeon.TextDetection
+	case d.docText:
+		return pigeon.DocumentTextDetection
+	case d.safeSearch:
+		return pigeon.SafeSearchDetection
+	case d.imageProperties:
+		return pigeon.ImageProperties
 	}
-	if d.landmark {
-		list = append(list, pigeon.LandmarkDetection)
-	}
-	if d.logo {
-		list = append(list, pigeon.LogoDetection)
-	}
-	if d.label {
-		list = append(list, pigeon.LabelDetection)
-	}
-	if d.text {
-		list = append(list, pigeon.TextDetection)
-	}
-	if d.docText {
-		list = append(list, pigeon.DocumentTextDetection)
-	}
-	if d.safeSearch {
-		list = append(list, pigeon.SafeSearchDetection)
-	}
-	if d.imageProperties {
-		list = append(list, pigeon.ImageProperties)
-	}
-
-	if len(list) == 0 {
-		list = append(list, defaultDetection)
-	}
-
-	features := make([]*vision.Feature, len(list))
-	for i := 0; i < len(list); i++ {
-		features[i] = pigeon.NewFeature(list[i])
-	}
-	return features
+	return pigeon.TypeUnspecified
 }

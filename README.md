@@ -1,7 +1,8 @@
 # Pigeon - Google Cloud Vision API on Golang
 
-[![GoDoc](https://godoc.org/github.com/kaneshin/pigeon?status.svg)](https://godoc.org/github.com/kaneshin/pigeon)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kaneshin/pigeon)](https://goreportcard.com/report/github.com/kaneshin/pigeon)
+[TODO: rewrite readmes]
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/pigeon)](https://goreportcard.com/report/github.com/EdoardoLaGreca/pigeon)
 
 `pigeon` is a service for the Google Cloud Vision API on Golang.
 
@@ -20,7 +21,7 @@ To generate the credentials file, please, refer to [this documentation page](htt
 `pigeon` provides the command-line tools.
 
 ```shell
-$ go install github.com/kaneshin/pigeon/cmd/pigeon@latest
+$ go install github.com/EdoardoLaGreca/pigeon/cmd/pigeon@latest
 ```
 
 Make sure that `pigeon` was installed correctly:
@@ -47,8 +48,8 @@ $ pigeon -label https://httpbin.org/image/jpeg
 ### `pigeon` package
 
 ```go
-import "github.com/kaneshin/pigeon"
-import "github.com/kaneshin/pigeon/credentials"
+import "github.com/EdoardoLaGreca/pigeon"
+import "github.com/EdoardoLaGreca/pigeon/credentials"
 
 func main() {
 	// Initialize vision service by a credentials json.

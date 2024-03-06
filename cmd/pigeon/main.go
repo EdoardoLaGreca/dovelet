@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/kaneshin/pigeon"
+	"github.com/EdoardoLaGreca/pigeon"
+	"github.com/EdoardoLaGreca/pigeon/credentials"
 )
 
 func main() {
@@ -14,33 +16,28 @@ func main() {
 	detects := DetectionsParse(os.Args[1:])
 
 	if args := detects.Args(); len(args) == 0 {
-		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "usage of %s:\n", os.Args[0])
 		detects.Usage()
 		os.Exit(1)
 	}
 
-	// Initialize vision service by a credentials json.
-	client, err := pigeon.New(nil)
+	// Provide credentials
+	creds, err := credentials.NewApplicationCredentials("")
 	if err != nil {
-		log.Fatalf("Unable to retrieve vision service: %v\n", err)
+		log.Fatalf("unable to fetch credentials: %v\n", err)
+		os.Exit(1)
 	}
 
-	// To call multiple image annotation requests.
-	batch, err := client.NewBatchAnnotateImageRequest(detects.Args(), detects.Features()...)
+	client := pigeon.NewClient(context.Background(), creds.Provide())
+	res, err := client.RequestImageAnnotation(detects.Args(), detects.Feature())
 	if err != nil {
-		log.Fatalf("Unable to retrieve image request: %v\n", err)
-	}
-
-	// Execute the "vision.images.annotate".
-	res, err := client.ImagesService().Annotate(batch).Do()
-	if err != nil {
-		log.Fatalf("Unable to execute images annotate requests: %v\n", err)
+		log.Fatalf("unable to request image annotation: %v", err)
 	}
 
 	// Marshal annotations from responses
 	body, err := json.MarshalIndent(res.Responses, "", "  ")
 	if err != nil {
-		log.Fatalf("Unable to marshal the response: %v\n", err)
+		log.Fatalf("unable to marshal the response: %v\n", err)
 	}
 	fmt.Println(string(body))
 }
