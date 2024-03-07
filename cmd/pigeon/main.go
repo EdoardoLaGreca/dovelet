@@ -29,8 +29,8 @@ func main() {
 	}
 
 	client := pigeon.NewClient(context.Background(), creds.Provide())
-	if args.Language() == "" {
-		client.SetLanguageHints([]string{args.Language()}, false)
+	if len(args.Language()) > 0 {
+		client.SetLanguageHints(args.Language(), false)
 	}
 	res, err := client.RequestImageAnnotation(args.Args(), args.Feature())
 	if err != nil {

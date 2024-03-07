@@ -84,7 +84,7 @@ func (vc *VisionClient) RequestImageAnnotation(imagePaths []string, feature Dete
 	}
 
 	if !vc.keepLanguageHints {
-		vc.languageHints = make([]string, 0)
+		vc.languageHints = []string{}
 	}
 
 	return c.BatchAnnotateImages(vc.context, batchRequest)

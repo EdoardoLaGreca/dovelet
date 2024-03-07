@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"strings"
 
 	"github.com/EdoardoLaGreca/pigeon"
 )
@@ -16,7 +17,7 @@ type CLArgs struct {
 	docText         bool
 	safeSearch      bool
 	imageProperties bool
-	language        string
+	languages       []string
 	flags           *flag.FlagSet
 }
 
@@ -33,12 +34,12 @@ func ParseArgs(args []string) *CLArgs {
 	docTextDetection := f.Bool("doc", false, "This flag specifies the document text detection (OCR) of the feature")
 	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
 	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
-	language := f.String("lang", "", "Specify a language for text detection (only works for -text and -doc).")
+	languages := f.String("lang", "", "Specify language hints for text detection (only works for -text and -doc). For more than one hint, separate them using commas `,`, for example \"en,it\".")
 	f.Usage = func() {
 		f.PrintDefaults()
 	}
 	f.Parse(args)
-	return &CLArgs{
+	clargs := &CLArgs{
 		face:            *faceDetection,
 		landmark:        *landmarkDetection,
 		logo:            *logoDetection,
@@ -47,9 +48,15 @@ func ParseArgs(args []string) *CLArgs {
 		docText:         *docTextDetection,
 		safeSearch:      *safeSearchDetection,
 		imageProperties: *imageProperties,
-		language:        *language,
+		languages:       strings.Split(*languages, ","),
 		flags:           f,
 	}
+
+	if clargs.Feature() != pigeon.TextDetection && clargs.Feature() != pigeon.DocumentTextDetection {
+		clargs.languages = []string{}
+	}
+
+	return clargs
 }
 
 // Args returns the non-flag command-line arguments.
@@ -85,6 +92,6 @@ func (d CLArgs) Feature() pigeon.DetectionFeature {
 	return pigeon.TypeUnspecified
 }
 
-func (d CLArgs) Language() string {
-	return d.language
+func (d CLArgs) Language() []string {
+	return d.languages
 }
