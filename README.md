@@ -1,198 +1,68 @@
-# Pigeon - Google Cloud Vision API on Golang
+# Pigeon
 
-[TODO: rewrite readmes]
+Pigeon is both a Go wrapper module for the Google Cloud Vision API and a tool to use such wrapper.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/pigeon)](https://goreportcard.com/report/github.com/EdoardoLaGreca/pigeon)
 
-`pigeon` is a service for the Google Cloud Vision API on Golang.
+## Requirements
 
-## Prerequisite
+You need to export the path of your Service Account private key (it should be a JSON file) as `GOOGLE_APPLICATION_CREDENTIALS` (replace `/path/to/service_account.json`).
 
-You need to export a service account json file to `GOOGLE_APPLICATION_CREDENTIALS` variable.
-
+```sh
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
+export GOOGLE_APPLICATION_CREDENTIALS
 ```
-$ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
-```
 
-To generate the credentials file, please, refer to [this documentation page](https://cloud.google.com/vision/docs/common/auth#authenticating_with_application_default_credentials)
+To generate the credentials file refer to ["Authentication with service accounts"](https://cloud.google.com/vision/docs/setup#sa).
 
-## Installation
+## Tool installation
 
 `pigeon` provides the command-line tools.
 
-```shell
-$ go install github.com/EdoardoLaGreca/pigeon/cmd/pigeon@latest
+```sh
+go install github.com/EdoardoLaGreca/pigeon/cmd/pigeon@latest
 ```
 
 Make sure that `pigeon` was installed correctly:
 
-```shell
-$ pigeon -h
+```sh
+pigeon -h
 ```
 
 ## Usage
 
 ### `pigeon` command
 
-`pigeon` is available to submit request with external image source (i.e. Google Cloud Storage image location).
+Use the `pigeon` tool command to make requests. The syntax is as follows.
 
-```shell
-# Default Detection is LabelDetection.
-$ pigeon assets/lenna.jpg
-$ pigeon -face gs://bucket_name/lenna.jpg
-$ pigeon -label https://httpbin.org/image/jpeg
+```sh
+pigeon -feature files ...
 ```
 
-![pigeon-cmd](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/pigeon-cmd.gif)
+Where:
+- `feature` is the feature to use (to get a list of available features, use `pigeon -h`)
+- `files ...` is one or more files to use in the request
+
+<!-- TODO: make new gif -->
+<!-- ![pigeon-cmd](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/pigeon-cmd.gif) -->
 
 ### `pigeon` package
 
-```go
-import "github.com/EdoardoLaGreca/pigeon"
-import "github.com/EdoardoLaGreca/pigeon/credentials"
+The pigeon package contains types and functions for simple Google Cloud Vision queries.
 
-func main() {
-	// Initialize vision service by a credentials json.
-	creds := credentials.NewApplicationCredentials("credentials.json")
-
-	// creds will set a pointer of credentials object using env value of
-	// "GOOGLE_APPLICATION_CREDENTIALS" if pass empty string to argument.
-	// creds := credentials.NewApplicationCredentials("")
-
-	config := pigeon.NewConfig().WithCredentials(creds)
-
-	client, err := pigeon.New(config)
-	if err != nil {
-		panic(err)
-	}
-
-	// To call multiple image annotation requests.
-	feature := pigeon.NewFeature(pigeon.LabelDetection)
-	batch, err := client.NewBatchAnnotateImageRequest([]string{"lenna.jpg"}, feature)
-	if err != nil {
-		panic(err)
-	}
-
-	// Execute the "vision.images.annotate".
-	res, err := client.ImagesService().Annotate(batch).Do()
-	if err != nil {
-		panic(err)
-	}
-
-	// Marshal annotations from responses
-	body, _ := json.MarshalIndent(res.Responses, "", "  ")
-	fmt.Println(string(body))
-}
-```
-
-#### pigeon.Client
-
-The `pigeon.Client` is wrapper of the `vision.Service`.
-
-```go
-// Initialize vision client by a credentials json.
-creds := credentials.NewApplicationCredentials("credentials.json")
-client, err := pigeon.New(creds)
-if err != nil {
-	panic(err)
-}
-```
-
-#### vision.Feature
-
-`vision.Feature` will be applied to `vision.AnnotateImageRequest`.
-
-```go
-// DetectionType returns a value of detection type.
-func DetectionType(d int) string {
-	switch d {
-	case TypeUnspecified:
-		return "TYPE_UNSPECIFIED"
-	case FaceDetection:
-		return "FACE_DETECTION"
-	case LandmarkDetection:
-		return "LANDMARK_DETECTION"
-	case LogoDetection:
-		return "LOGO_DETECTION"
-	case LabelDetection:
-		return "LABEL_DETECTION"
-	case TextDetection:
-		return "TEXT_DETECTION"
-	case DocumentTextDetection:
-		return "DOCUMENT_TEXT_DETECTION"
-	case SafeSearchDetection:
-		return "SAFE_SEARCH_DETECTION"
-	case ImageProperties:
-		return "IMAGE_PROPERTIES"
-	}
-	return ""
-}
-
-// Choose detection types
-features := []*vision.Feature{
-	pigeon.NewFeature(pigeon.FaceDetection),
-	pigeon.NewFeature(pigeon.LabelDetection),
-	pigeon.NewFeature(pigeon.ImageProperties),
-}
-```
-
-#### vision.AnnotateImageRequest
-
-`vision.AnnotateImageRequest` needs to set the uri of the form `"gs://bucket_name/foo.png"` or byte content of image.
-
-- Google Cloud Storage
-
-```go
-src := "gs://bucket_name/lenna.jpg"
-req, err := pigeon.NewAnnotateImageSourceRequest(src, features...)
-if err != nil {
-	panic(err)
-}
-```
-
-- Base64 Encoded String
-
-```go
-b, err := ioutil.ReadFile(filename)
-if err != nil {
-	panic(err)
-}
-req, err = pigeon.NewAnnotateImageContentRequest(b, features...)
-if err != nil {
-	panic(err)
-}
-```
-
-#### Submit the request to the Google Cloud Vision API
-
-```go
-// To call multiple image annotation requests.
-batch, err := client.NewBatchAnnotateImageRequest(list, features()...)
-if err != nil {
-	panic(err)
-}
-
-// Execute the "vision.images.annotate".
-res, err := client.ImagesService().Annotate(batch).Do()
-if err != nil {
-	panic(err)
-}
-```
-
+Refer to [`cmd/pigeon/main.go`](cmd/pigeon/main.go) for an example.
 
 ## Example
 
-### Pigeon
+input:
 
 ![pigeon](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/pigeon.png)
 
-#### input
-
-```shell
-$ pigeon -label assets/pigeon.png
+```sh
+pigeon -label assets/pigeon.png
 ```
 
-#### output
+output:
 
 ```json
 [
@@ -216,15 +86,15 @@ $ pigeon -label assets/pigeon.png
 
 ### Lenna
 
+input:
+
 ![lenna](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/lenna.jpg)
 
-#### input
-
-```shell
-$ pigeon -safe-search assets/lenna.jpg
+```sh
+pigeon -safe-search assets/lenna.jpg
 ```
 
-#### output
+output:
 
 ```json
 [
@@ -241,8 +111,9 @@ $ pigeon -safe-search assets/lenna.jpg
 
 ## License
 
-[The MIT License (MIT)](http://kaneshin.mit-license.org/)
+[MIT](LICENSE)
 
-## Author
+## Credits
 
-Shintaro Kaneko <kaneshin0120@gmail.com>
+- Author of the original software: [Shintaro Kaneko](https://github.com/kaneshin) ([repo](https://github.com/kaneshin/pigeon))
+- Author of the fork: [Edoardo La Greca](https://github.com/EdoardoLaGreca) (me)
