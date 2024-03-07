@@ -1,5 +1,5 @@
 module github.com/EdoardoLaGreca/pigeon
-
+// TODO: update to latest go version
 go 1.13
 
 require (
