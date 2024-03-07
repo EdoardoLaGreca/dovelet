@@ -7,7 +7,7 @@ import (
 )
 
 // Detections type
-type Detections struct {
+type CLArgs struct {
 	face            bool
 	landmark        bool
 	logo            bool
@@ -21,9 +21,9 @@ type Detections struct {
 }
 
 // TODO: rephrase flag descriptions
-// DetectionsParse parses the command-line flags from arguments and returns
+// ParseArgs parses the command-line flags from arguments and returns
 // a new pointer of a Detections object..
-func DetectionsParse(args []string) *Detections {
+func ParseArgs(args []string) *CLArgs {
 	f := flag.NewFlagSet("Detections", flag.ExitOnError)
 	faceDetection := f.Bool("face", false, "This flag specifies the face detection of the feature")
 	landmarkDetection := f.Bool("landmark", false, "This flag specifies the landmark detection of the feature")
@@ -38,7 +38,7 @@ func DetectionsParse(args []string) *Detections {
 		f.PrintDefaults()
 	}
 	f.Parse(args)
-	return &Detections{
+	return &CLArgs{
 		face:            *faceDetection,
 		landmark:        *landmarkDetection,
 		logo:            *logoDetection,
@@ -53,17 +53,17 @@ func DetectionsParse(args []string) *Detections {
 }
 
 // Args returns the non-flag command-line arguments.
-func (d Detections) Args() []string {
+func (d CLArgs) Args() []string {
 	return d.flags.Args()
 }
 
 // Usage prints options of the Detection object.
-func (d Detections) Usage() {
+func (d CLArgs) Usage() {
 	d.flags.Usage()
 }
 
 // Feature returns the feature specified as a flag.
-func (d Detections) Feature() pigeon.DetectionFeature {
+func (d CLArgs) Feature() pigeon.DetectionFeature {
 	switch {
 	case d.face:
 		return pigeon.FaceDetection
@@ -85,6 +85,6 @@ func (d Detections) Feature() pigeon.DetectionFeature {
 	return pigeon.TypeUnspecified
 }
 
-func (d Detections) Language() string {
+func (d CLArgs) Language() string {
 	return d.language
 }
