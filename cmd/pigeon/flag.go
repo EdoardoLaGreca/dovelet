@@ -16,7 +16,8 @@ type Detections struct {
 	docText         bool
 	safeSearch      bool
 	imageProperties bool
-	flag            *flag.FlagSet
+	language        string
+	flags           *flag.FlagSet
 }
 
 // TODO: rephrase flag descriptions
@@ -32,6 +33,7 @@ func DetectionsParse(args []string) *Detections {
 	docTextDetection := f.Bool("doc", false, "This flag specifies the document text detection (OCR) of the feature")
 	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
 	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
+	language := f.String("lang", "", "Specify a language for text detection (only works for -text and -doc).")
 	f.Usage = func() {
 		f.PrintDefaults()
 	}
@@ -45,22 +47,23 @@ func DetectionsParse(args []string) *Detections {
 		docText:         *docTextDetection,
 		safeSearch:      *safeSearchDetection,
 		imageProperties: *imageProperties,
-		flag:            f,
+		language:        *language,
+		flags:           f,
 	}
 }
 
 // Args returns the non-flag command-line arguments.
-func (d *Detections) Args() []string {
-	return d.flag.Args()
+func (d Detections) Args() []string {
+	return d.flags.Args()
 }
 
 // Usage prints options of the Detection object.
-func (d *Detections) Usage() {
-	d.flag.Usage()
+func (d Detections) Usage() {
+	d.flags.Usage()
 }
 
 // Feature returns the feature specified as a flag.
-func (d *Detections) Feature() pigeon.DetectionFeature {
+func (d Detections) Feature() pigeon.DetectionFeature {
 	switch {
 	case d.face:
 		return pigeon.FaceDetection
@@ -80,4 +83,8 @@ func (d *Detections) Feature() pigeon.DetectionFeature {
 		return pigeon.ImageProperties
 	}
 	return pigeon.TypeUnspecified
+}
+
+func (d Detections) Language() string {
+	return d.language
 }

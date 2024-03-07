@@ -17,6 +17,10 @@ type VisionClient struct {
 	context context.Context
 	// The credentials for each client
 	credentials option.ClientOption
+	// Language hints (see https://pkg.go.dev/cloud.google.com/go/vision/v2/apiv1/visionpb#ImageContext.LanguageHints)
+	languageHints []string
+	// Keep language hints for all requests, once set?
+	keepLanguageHints bool
 }
 
 // New returns a pointer to a new Client object.
@@ -27,8 +31,15 @@ func NewClient(ctx context.Context, credentials option.ClientOption) VisionClien
 	}
 }
 
+// Set language hints for better results (see https://cloud.google.com/vision/docs/languages, the "languageHints code" column).
+// Set keep to true to keep the languages for all successive requests.
+func (c *VisionClient) SetLanguageHints(languages []string, keep bool) {
+	c.languageHints = languages
+	c.keepLanguageHints = keep
+}
+
 // MakeBatchAnnotateImageRequest performs a batch image annotation request.
-func (vc VisionClient) RequestImageAnnotation(imagePaths []string, feature DetectionFeature) (*visionpb.BatchAnnotateImagesResponse, error) {
+func (vc *VisionClient) RequestImageAnnotation(imagePaths []string, feature DetectionFeature) (*visionpb.BatchAnnotateImagesResponse, error) {
 	c, err := vision.NewImageAnnotatorClient(vc.context, vc.credentials)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create an image annotator client: %v", err)
@@ -55,9 +66,11 @@ func (vc VisionClient) RequestImageAnnotation(imagePaths []string, feature Detec
 
 	for i, vi := range visionImages {
 		imageRequests[i] = &visionpb.AnnotateImageRequest{
-			Image:        vi,
-			Features:     make([]*visionpb.Feature, 1),
-			ImageContext: nil,
+			Image:    vi,
+			Features: make([]*visionpb.Feature, 1),
+			ImageContext: &visionpb.ImageContext{
+				LanguageHints: vc.languageHints,
+			},
 		}
 		imageRequests[i].Features[0] = &visionpb.Feature{
 			Type: feature.VisionFeature(),
@@ -68,6 +81,10 @@ func (vc VisionClient) RequestImageAnnotation(imagePaths []string, feature Detec
 	batchRequest := &visionpb.BatchAnnotateImagesRequest{
 		Requests: imageRequests,
 		// do not specify Parent and Labels
+	}
+
+	if !vc.keepLanguageHints {
+		vc.languageHints = make([]string, 0)
 	}
 
 	return c.BatchAnnotateImages(vc.context, batchRequest)
