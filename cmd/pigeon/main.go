@@ -29,7 +29,9 @@ func main() {
 	}
 
 	client := pigeon.NewClient(context.Background(), creds.Provide())
-	client.SetLanguageHints([]string{detects.language}, false)
+	if detects.Language() == "" {
+		client.SetLanguageHints([]string{detects.Language()}, false)
+	}
 	res, err := client.RequestImageAnnotation(detects.Args(), detects.Feature())
 	if err != nil {
 		log.Fatalf("unable to request image annotation: %v", err)
