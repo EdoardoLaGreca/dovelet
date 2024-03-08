@@ -60,8 +60,9 @@ func (vc VisionClient) RequestImageAnnotation(imagePaths []string, feature Detec
 			ImageContext: nil,
 		}
 		imageRequests[i].Features[0] = &visionpb.Feature{
-			Type: feature.VisionFeature(),
-			// use default MaxResults and Model
+			Type:  feature.VisionFeature(),
+			Model: "builtin/latest",
+			// use default MaxResults
 		}
 	}
 
