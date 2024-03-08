@@ -4,6 +4,8 @@ Pigeon is both a Go wrapper module for the Google Cloud Vision API and a tool to
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/pigeon)](https://goreportcard.com/report/github.com/EdoardoLaGreca/pigeon)
 
+The original Pigeon tool and library used deprecated Google Cloud Vision APIs. One reason could be that, at the time of writing, its last commit was on Oct 14, 2020, which means that the APIs may have been deprecated somewhere after the last commit. This fork attempts to stay up to date and to pursue a similar purpose. Apart from the usage of deprecated APIs, I think that the original Pigeon codebase was unnecessarily complex.
+
 ## Requirements
 
 You need to export the path of your Service Account private key (it should be a JSON file) as `GOOGLE_APPLICATION_CREDENTIALS` (replace `/path/to/service_account.json`).
