@@ -25,13 +25,12 @@ func main() {
 	creds, err := credentials.NewApplicationCredentials("")
 	if err != nil {
 		log.Fatalf("unable to fetch credentials: %v\n", err)
-		os.Exit(1)
 	}
 
 	client := pigeon.NewClient(context.Background(), creds.Provide())
 	res, err := client.RequestImageAnnotation(detects.Args(), detects.Feature())
 	if err != nil {
-		log.Fatalf("unable to request image annotation: %v", err)
+		log.Fatalf("unable to request image annotation: %v\n", err)
 	}
 
 	// Marshal annotations from responses
