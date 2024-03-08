@@ -2,12 +2,13 @@ package main
 
 import (
 	"flag"
+	"strings"
 
 	"github.com/EdoardoLaGreca/pigeon"
 )
 
 // Detections type
-type Detections struct {
+type CLArgs struct {
 	face            bool
 	landmark        bool
 	logo            bool
@@ -16,13 +17,14 @@ type Detections struct {
 	docText         bool
 	safeSearch      bool
 	imageProperties bool
-	flag            *flag.FlagSet
+	languages       []string
+	flags           *flag.FlagSet
 }
 
 // TODO: rephrase flag descriptions
-// DetectionsParse parses the command-line flags from arguments and returns
+// ParseArgs parses the command-line flags from arguments and returns
 // a new pointer of a Detections object..
-func DetectionsParse(args []string) *Detections {
+func ParseArgs(args []string) *CLArgs {
 	f := flag.NewFlagSet("Detections", flag.ExitOnError)
 	faceDetection := f.Bool("face", false, "This flag specifies the face detection of the feature")
 	landmarkDetection := f.Bool("landmark", false, "This flag specifies the landmark detection of the feature")
@@ -32,11 +34,12 @@ func DetectionsParse(args []string) *Detections {
 	docTextDetection := f.Bool("doc", false, "This flag specifies the document text detection (OCR) of the feature")
 	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
 	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
+	languages := f.String("lang", "", "Specify language hints for text detection (only works for -text and -doc). For more than one hint, separate them using commas `,`, for example \"en,it\".")
 	f.Usage = func() {
 		f.PrintDefaults()
 	}
 	f.Parse(args)
-	return &Detections{
+	clargs := &CLArgs{
 		face:            *faceDetection,
 		landmark:        *landmarkDetection,
 		logo:            *logoDetection,
@@ -45,22 +48,29 @@ func DetectionsParse(args []string) *Detections {
 		docText:         *docTextDetection,
 		safeSearch:      *safeSearchDetection,
 		imageProperties: *imageProperties,
-		flag:            f,
+		languages:       strings.Split(*languages, ","),
+		flags:           f,
 	}
+
+	if clargs.Feature() != pigeon.TextDetection && clargs.Feature() != pigeon.DocumentTextDetection {
+		clargs.languages = []string{}
+	}
+
+	return clargs
 }
 
 // Args returns the non-flag command-line arguments.
-func (d *Detections) Args() []string {
-	return d.flag.Args()
+func (d CLArgs) Args() []string {
+	return d.flags.Args()
 }
 
 // Usage prints options of the Detection object.
-func (d *Detections) Usage() {
-	d.flag.Usage()
+func (d CLArgs) Usage() {
+	d.flags.Usage()
 }
 
 // Feature returns the feature specified as a flag.
-func (d *Detections) Feature() pigeon.DetectionFeature {
+func (d CLArgs) Feature() pigeon.DetectionFeature {
 	switch {
 	case d.face:
 		return pigeon.FaceDetection
@@ -80,4 +90,8 @@ func (d *Detections) Feature() pigeon.DetectionFeature {
 		return pigeon.ImageProperties
 	}
 	return pigeon.TypeUnspecified
+}
+
+func (d CLArgs) Language() []string {
+	return d.languages
 }

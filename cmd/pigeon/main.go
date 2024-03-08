@@ -13,11 +13,11 @@ import (
 
 func main() {
 	// Parse arguments to run this function.
-	detects := DetectionsParse(os.Args[1:])
+	args := ParseArgs(os.Args[1:])
 
-	if args := detects.Args(); len(args) == 0 {
+	if len(args.Args()) == 0 {
 		fmt.Fprintf(os.Stderr, "usage of %s:\n", os.Args[0])
-		detects.Usage()
+		args.Usage()
 		os.Exit(1)
 	}
 
@@ -28,7 +28,10 @@ func main() {
 	}
 
 	client := pigeon.NewClient(context.Background(), creds.Provide())
-	res, err := client.RequestImageAnnotation(detects.Args(), detects.Feature())
+	if len(args.Language()) > 0 {
+		client.SetLanguageHints(args.Language(), false)
+	}
+	res, err := client.RequestImageAnnotation(args.Args(), args.Feature())
 	if err != nil {
 		log.Fatalf("unable to request image annotation: %v\n", err)
 	}
