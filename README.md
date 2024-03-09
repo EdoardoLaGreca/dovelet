@@ -33,16 +33,17 @@ pigeon -h
 
 ## Usage
 
-### `pigeon` command
+### `pigeon` tool
 
-Use the `pigeon` tool command to make requests. The syntax is as follows.
+Use the `pigeon` tool to make requests. The syntax is as follows.
 
 ```sh
-pigeon -feature files ...
+pigeon -feature [ -lang l1,l2,... ] files ...
 ```
 
 Where:
-- `feature` is the feature to use (to get a list of available features, use `pigeon -h`)
+- `-feature` is the feature to use (from the available feature set, use `pigeon -h` to get the complete list)
+- `l1,l2,...` are language hints for better accuracy (see "`languageHints` code" in [Supported languages](https://cloud.google.com/vision/docs/languages#supported-langs))
 - `files ...` is one or more files to use in the request
 
 <!-- TODO: make new gif -->
@@ -58,7 +59,7 @@ Refer to [`cmd/pigeon/main.go`](cmd/pigeon/main.go) for an example.
 
 input:
 
-![pigeon](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/pigeon.png)
+![pigeon](https://raw.githubusercontent.com/EdoardoLaGreca/pigeon/main/assets/pigeon.png)
 
 ```sh
 pigeon -label assets/pigeon.png
@@ -90,7 +91,7 @@ output:
 
 input:
 
-![lenna](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/lenna.jpg)
+![lenna](https://raw.githubusercontent.com/EdoardoLaGreca/pigeon/main/assets/lenna.jpg)
 
 ```sh
 pigeon -safe-search assets/lenna.jpg
@@ -118,4 +119,3 @@ output:
 ## Credits
 
 - Author of the original software: [Shintaro Kaneko](https://github.com/kaneshin) ([repo](https://github.com/kaneshin/pigeon))
-- Author of the fork: [Edoardo La Greca](https://github.com/EdoardoLaGreca) (me)
