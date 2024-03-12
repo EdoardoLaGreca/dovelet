@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/EdoardoLaGreca/dovelet"
-	"github.com/kaneshin/dovelet"
 )
 
 // Detections type
