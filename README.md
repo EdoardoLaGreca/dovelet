@@ -1,6 +1,6 @@
-# Pigeon
+# Dovelet
 
-Pigeon is both a Go wrapper module for the Google Cloud Vision API and a tool to use such wrapper.
+Dovelet is both a Go wrapper module for the Google Cloud Vision API and a tool to use such wrapper.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/dovelet)](https://goreportcard.com/report/github.com/EdoardoLaGreca/dovelet)
 
