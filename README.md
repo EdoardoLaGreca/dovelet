@@ -2,6 +2,7 @@
 
 Dovelet is both a Go wrapper module for the Google Cloud Vision API and a tool to use such wrapper.
 
+[![build](https://github.com/EdoardoLaGreca/dovelet/actions/workflows/go.yml/badge.svg)](https://github.com/EdoardoLaGreca/dovelet/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/dovelet)](https://goreportcard.com/report/github.com/EdoardoLaGreca/dovelet)
 
 The original Pigeon tool and library used deprecated Google Cloud Vision APIs. One reason could be that, at the time of writing, its last commit was on Oct 14, 2020, which means that the APIs may have been deprecated somewhere after the last commit. This fork attempts to stay up to date and to pursue a similar purpose. Apart from the usage of deprecated APIs, I think that the original Pigeon codebase was unnecessarily complex.
