@@ -4,7 +4,8 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/EdoardoLaGreca/pigeon"
+	"github.com/EdoardoLaGreca/dovelet"
+	"github.com/kaneshin/dovelet"
 )
 
 // Detections type
@@ -52,7 +53,7 @@ func ParseArgs(args []string) *CLArgs {
 		flags:           f,
 	}
 
-	if clargs.Feature() != pigeon.TextDetection && clargs.Feature() != pigeon.DocumentTextDetection {
+	if clargs.Feature() != dovelet.TextDetection && clargs.Feature() != dovelet.DocumentTextDetection {
 		clargs.languages = []string{}
 	}
 
@@ -70,26 +71,26 @@ func (d CLArgs) Usage() {
 }
 
 // Feature returns the feature specified as a flag.
-func (d CLArgs) Feature() pigeon.DetectionFeature {
+func (d CLArgs) Feature() dovelet.DetectionFeature {
 	switch {
 	case d.face:
-		return pigeon.FaceDetection
+		return dovelet.FaceDetection
 	case d.landmark:
-		return pigeon.LandmarkDetection
+		return dovelet.LandmarkDetection
 	case d.logo:
-		return pigeon.LogoDetection
+		return dovelet.LogoDetection
 	case d.label:
-		return pigeon.LabelDetection
+		return dovelet.LabelDetection
 	case d.text:
-		return pigeon.TextDetection
+		return dovelet.TextDetection
 	case d.docText:
-		return pigeon.DocumentTextDetection
+		return dovelet.DocumentTextDetection
 	case d.safeSearch:
-		return pigeon.SafeSearchDetection
+		return dovelet.SafeSearchDetection
 	case d.imageProperties:
-		return pigeon.ImageProperties
+		return dovelet.ImageProperties
 	}
-	return pigeon.TypeUnspecified
+	return dovelet.TypeUnspecified
 }
 
 func (d CLArgs) Language() []string {

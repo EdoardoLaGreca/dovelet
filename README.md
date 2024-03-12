@@ -2,7 +2,7 @@
 
 Pigeon is both a Go wrapper module for the Google Cloud Vision API and a tool to use such wrapper.
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/pigeon)](https://goreportcard.com/report/github.com/EdoardoLaGreca/pigeon)
+[![Go Report Card](https://goreportcard.com/badge/github.com/EdoardoLaGreca/dovelet)](https://goreportcard.com/report/github.com/EdoardoLaGreca/dovelet)
 
 The original Pigeon tool and library used deprecated Google Cloud Vision APIs. One reason could be that, at the time of writing, its last commit was on Oct 14, 2020, which means that the APIs may have been deprecated somewhere after the last commit. This fork attempts to stay up to date and to pursue a similar purpose. Apart from the usage of deprecated APIs, I think that the original Pigeon codebase was unnecessarily complex.
 
@@ -19,50 +19,50 @@ To generate the credentials file refer to ["Authentication with service accounts
 
 ## Tool installation
 
-`pigeon` provides the command-line tools.
+`dovelet` provides the command-line tools.
 
 ```sh
-go install github.com/EdoardoLaGreca/pigeon/cmd/pigeon@latest
+go install github.com/EdoardoLaGreca/dovelet/cmd/dovelet@latest
 ```
 
-Make sure that `pigeon` was installed correctly:
+Make sure that `dovelet` was installed correctly:
 
 ```sh
-pigeon -h
+dovelet -h
 ```
 
 ## Usage
 
-### `pigeon` tool
+### `dovelet` tool
 
-Use the `pigeon` tool to make requests. The syntax is as follows.
+Use the `dovelet` tool to make requests. The syntax is as follows.
 
 ```sh
-pigeon -feature [ -lang l1,l2,... ] files ...
+dovelet -feature [ -lang l1,l2,... ] files ...
 ```
 
 Where:
-- `-feature` is the feature to use (from the available feature set, use `pigeon -h` to get the complete list)
+- `-feature` is the feature to use (from the available feature set, use `dovelet -h` to get the complete list)
 - `l1,l2,...` are language hints for better accuracy (see "`languageHints` code" in [Supported languages](https://cloud.google.com/vision/docs/languages#supported-langs))
 - `files ...` is one or more files to use in the request
 
 <!-- TODO: make new gif -->
 <!-- ![pigeon-cmd](https://raw.githubusercontent.com/kaneshin/pigeon/main/assets/pigeon-cmd.gif) -->
 
-### `pigeon` package
+### `dovelet` package
 
-The pigeon package contains types and functions for simple Google Cloud Vision queries.
+The dovelet package contains types and functions for simple Google Cloud Vision queries.
 
-Refer to [`cmd/pigeon/main.go`](cmd/pigeon/main.go) for an example.
+Refer to [`cmd/dovelet/main.go`](cmd/dovelet/main.go) for an example.
 
 ## Example
 
 input:
 
-![pigeon](https://raw.githubusercontent.com/EdoardoLaGreca/pigeon/main/assets/pigeon.png)
+![dovelet](https://raw.githubusercontent.com/EdoardoLaGreca/dovelet/main/assets/dovelet.png)
 
 ```sh
-pigeon -label assets/pigeon.png
+dovelet -label assets/dovelet.png
 ```
 
 output:
@@ -91,10 +91,10 @@ output:
 
 input:
 
-![lenna](https://raw.githubusercontent.com/EdoardoLaGreca/pigeon/main/assets/lenna.jpg)
+![lenna](https://raw.githubusercontent.com/EdoardoLaGreca/dovelet/main/assets/lenna.jpg)
 
 ```sh
-pigeon -safe-search assets/lenna.jpg
+dovelet -safe-search assets/lenna.jpg
 ```
 
 output:

@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/EdoardoLaGreca/pigeon"
-	"github.com/EdoardoLaGreca/pigeon/credentials"
+	"github.com/EdoardoLaGreca/dovelet"
+	"github.com/EdoardoLaGreca/dovelet/credentials"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("unable to fetch credentials: %v\n", err)
 	}
 
-	client := pigeon.NewClient(context.Background(), creds.Provide())
+	client := dovelet.NewClient(context.Background(), creds.Provide())
 	if len(args.Language()) > 0 {
 		client.SetLanguageHints(args.Language(), false)
 	}

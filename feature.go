@@ -1,4 +1,4 @@
-package pigeon
+package dovelet
 
 import (
 	"cloud.google.com/go/vision/v2/apiv1/visionpb"

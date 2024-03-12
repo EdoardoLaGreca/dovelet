@@ -1,4 +1,4 @@
-module github.com/EdoardoLaGreca/pigeon
+module github.com/EdoardoLaGreca/dovelet
 
 go 1.18
 
