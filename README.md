@@ -82,7 +82,7 @@ Refer to [`cmd/dovelet/main.go`](cmd/dovelet/main.go) for an example.
 
 input:
 
-<img src="assets/pigeon.png" alt="pigeon" style="max-width: 28em; max-height: 28em;">
+<img src="assets/pigeon.png" alt="pigeon" style="height: 24em;">
 
 ```sh
 dovelet -label assets/pigeon.png
@@ -163,7 +163,7 @@ output:
 
 input:
 
-<img src="assets/lenna.jpg" alt="lenna" style="max-width: 28em; max-height: 28em;">
+<img src="assets/lenna.jpg" alt="lenna" style="width: 30em;">
 
 ```sh
 dovelet -safe-search assets/lenna.jpg
