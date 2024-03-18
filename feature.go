@@ -6,25 +6,24 @@ import (
 
 type DetectionFeature int
 
-// TODO: complete missing text in comments
 const (
-	// TypeUnspecified - Unspecified feature type.
+	// Unspecified or unknown feature type.
 	TypeUnspecified DetectionFeature = iota
-	// FaceDetection - Run face detection.
+	// Face detection.
 	FaceDetection
-	// LandmarkDetection - Run landmark detection.
+	// Landmark detection.
 	LandmarkDetection
-	// LogoDetection - Run logo detection.
+	// Logo detection.
 	LogoDetection
-	// LabelDetection - Run label detection.
+	// Label detection.
 	LabelDetection
-	// TextDetection - Run OCR with big text
+	// OCR with big text.
 	TextDetection
-	// DocumentTextDetection - Run OCR on document
+	// OCR on document or small text.
 	DocumentTextDetection
-	// SafeSearchDetection - Run various computer vision models to
+	// Detect potential sensitive content.
 	SafeSearchDetection
-	// ImageProperties - compute image safe-search properties.
+	// Compute image properties.
 	ImageProperties
 )
 
