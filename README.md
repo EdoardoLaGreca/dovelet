@@ -35,7 +35,7 @@ go install github.com/EdoardoLaGreca/dovelet/cmd/dovelet@latest
 ```sh
 git clone https://github.com/EdoardoLaGreca/dovelet
 cd dovelet
-go build ./cmd/dovelet # or: go install ./cmd/dovelet
+go install ./cmd/dovelet # or: go build ./cmd/dovelet
 ```
 
 ### Usage
