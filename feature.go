@@ -75,8 +75,3 @@ func (d DetectionFeature) VisionFeature() visionpb.Feature_Type {
 	}
 	return visionpb.Feature_TYPE_UNSPECIFIED
 }
-
-// NewFeature returns a pointer to a new vision's Feature object.
-// func NewFeature(d int) *vision.Feature {
-// 	return &vision.Feature{Type: DetectionType(d)}
-// }
