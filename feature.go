@@ -27,31 +27,6 @@ const (
 	ImageProperties
 )
 
-// DetectionType returns a value of detection type.
-func (d DetectionFeature) String() string {
-	switch d {
-	case TypeUnspecified:
-		return "TYPE_UNSPECIFIED"
-	case FaceDetection:
-		return "FACE_DETECTION"
-	case LandmarkDetection:
-		return "LANDMARK_DETECTION"
-	case LogoDetection:
-		return "LOGO_DETECTION"
-	case LabelDetection:
-		return "LABEL_DETECTION"
-	case TextDetection:
-		return "TEXT_DETECTION"
-	case DocumentTextDetection:
-		return "DOCUMENT_TEXT_DETECTION"
-	case SafeSearchDetection:
-		return "SAFE_SEARCH_DETECTION"
-	case ImageProperties:
-		return "IMAGE_PROPERTIES"
-	}
-	return ""
-}
-
 func (d DetectionFeature) VisionFeature() visionpb.Feature_Type {
 	switch d {
 	case TypeUnspecified:
