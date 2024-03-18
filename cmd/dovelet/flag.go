@@ -7,7 +7,7 @@ import (
 	"github.com/EdoardoLaGreca/dovelet"
 )
 
-// Detections type
+// A CLArgs holds values command line argument values.
 type CLArgs struct {
 	face            bool
 	landmark        bool
@@ -21,8 +21,7 @@ type CLArgs struct {
 	flags           *flag.FlagSet
 }
 
-// ParseArgs parses the command-line flags from arguments and returns
-// a new pointer of a Detections object..
+// ParseArgs parses the command line flags and arguments.
 func ParseArgs(args []string) *CLArgs {
 	f := flag.NewFlagSet("Detections", flag.ExitOnError)
 	faceDetection := f.Bool("face", false, "Run face detection.")
@@ -91,6 +90,8 @@ func (d CLArgs) Feature() dovelet.DetectionFeature {
 	return dovelet.TypeUnspecified
 }
 
+// Language returns the language(s) specified as command line arguments for
+// text detection.
 func (d CLArgs) Language() []string {
 	return d.languages
 }

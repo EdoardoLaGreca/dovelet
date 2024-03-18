@@ -7,19 +7,20 @@ import (
 	"google.golang.org/api/option"
 )
 
-// A ApplicationCredentialsProvider retrieves credentials from the current user's home
-// directory, and keeps track if those credentials are expired.
+// An ApplicationCredentialsProvider has a file system path to fetch the
+// credentials from.
 type ApplicationCredentialsProvider struct {
-	// FilePath holds the path to the credentials file.
-	FilePath string
+	// filePath holds the path to the credentials file.
+	filePath string
 }
 
-// NewApplicationCredentials returns a pointer to a new Credentials object
-// wrapping the file provider.
-func NewApplicationCredentials(filename string) (*ApplicationCredentialsProvider, error) {
-	if filename != "" {
+// NewApplicationCredentials fetches credentials from a file name or path in
+// the file system. If the file name is empty, it uses the value of the
+// `GOOGLE_APPLICATION_CREDENTIALS` shell variable.
+func NewApplicationCredentials(filepath string) (*ApplicationCredentialsProvider, error) {
+	if filepath != "" {
 		return &ApplicationCredentialsProvider{
-			FilePath: filename,
+			filePath: filepath,
 		}, nil
 	}
 	fpath, err := credentialsPath()
@@ -27,18 +28,23 @@ func NewApplicationCredentials(filename string) (*ApplicationCredentialsProvider
 		return nil, err
 	}
 	return &ApplicationCredentialsProvider{
-		FilePath: fpath,
+		filePath: fpath,
 	}, nil
 }
 
-// Provide reads and extracts the shared credentials from the current
-// users home directory.
-func (p *ApplicationCredentialsProvider) Provide() option.ClientOption {
-	return option.WithCredentialsFile(p.FilePath)
+// FilePath returns the path associated with an ApplicationCredentialsProvider.
+func (acp ApplicationCredentialsProvider) FilePath() string {
+	return acp.filePath
 }
 
-// credentialsPath returns the filename to use to read google application credentials.
-// Will return an error if the user's home directory path cannot be found.
+// Provide returns the ClientOption instance holding the credentials.
+func (p *ApplicationCredentialsProvider) Provide() option.ClientOption {
+	return option.WithCredentialsFile(p.filePath)
+}
+
+// credentialsPath returns the filename to use to read google application
+// credentials. credentialsPath returns an error if the user's home
+// directory path cannot be found.
 func credentialsPath() (string, error) {
 	varname := "GOOGLE_APPLICATION_CREDENTIALS"
 	fpath := os.Getenv(varname)

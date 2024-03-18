@@ -10,20 +10,21 @@ import (
 	"google.golang.org/api/option"
 )
 
-// VisionClient holds the generic properties for any Google Cloud Vision client.
-// This type should become a general type for all vision client types in future, for now it only holds some common data.
+// A VisionClient has generic Google Cloud Vision client properties.
 type VisionClient struct {
-	// The context for each client
+	// context is the client context.
 	context context.Context
-	// The credentials for each client
+	// credentials holds the client credentials.
 	credentials option.ClientOption
-	// Language hints (see https://pkg.go.dev/cloud.google.com/go/vision/v2/apiv1/visionpb#ImageContext.LanguageHints)
+	// languageHints holds the specified language hints.
+	// (See https://pkg.go.dev/cloud.google.com/go/vision/v2/apiv1/visionpb#ImageContext.LanguageHints)
 	languageHints []string
-	// Keep language hints for all requests, once set?
+	// keepLanguageHints decides whether the current language hints are kept
+	// for the following requests (true) or discarded after the next request (false).
 	keepLanguageHints bool
 }
 
-// New returns a pointer to a new Client object.
+// NewClient returns a new VisionClient instance.
 func NewClient(ctx context.Context, credentials option.ClientOption) VisionClient {
 	return VisionClient{
 		context:     ctx,
@@ -31,7 +32,8 @@ func NewClient(ctx context.Context, credentials option.ClientOption) VisionClien
 	}
 }
 
-// Set language hints for better results (see https://cloud.google.com/vision/docs/languages, the "languageHints code" column).
+// Set language hints for better results (see https://cloud.google.com/vision/docs/languages,
+// the "languageHints code" column).
 // Set keep to true to keep the languages for all successive requests.
 func (c *VisionClient) SetLanguageHints(languages []string, keep bool) {
 	c.languageHints = languages

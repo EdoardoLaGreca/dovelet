@@ -7,11 +7,10 @@ import (
 	"google.golang.org/api/option"
 )
 
-// A Provider is the interface for any component which will provide credentials
-// Value.
-type Provider interface {
-	// Provide returns nil if it successfully retrieved the value.
-	// Error is returned if the value were not obtainable, or empty.
+// A Provider is any component which provides credentials.
+type CredentialsProvider interface {
+	// Provide returns the ClientOption associated with the credentials.
+	// It returns an error if the credentials could not be fetched.
 	Provide() (option.ClientOption, error)
 }
 
@@ -19,11 +18,11 @@ type Provider interface {
 // credentials Value.
 type Credentials struct {
 	m        sync.Mutex
-	provider Provider
+	provider CredentialsProvider
 }
 
 // NewCredentials returns a pointer to a new Credentials with the provider set.
-func NewCredentials(provider Provider) *Credentials {
+func NewCredentials(provider CredentialsProvider) *Credentials {
 	return &Credentials{
 		provider: provider,
 	}

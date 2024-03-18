@@ -4,6 +4,7 @@ import (
 	"cloud.google.com/go/vision/v2/apiv1/visionpb"
 )
 
+// A DetectionFeature is a Vision feature used in detection.
 type DetectionFeature int
 
 const (
@@ -27,6 +28,7 @@ const (
 	ImageProperties
 )
 
+// VisionFeature maps DetectionFeature values to visionpb.Feature_Type values.
 func (d DetectionFeature) VisionFeature() visionpb.Feature_Type {
 	switch d {
 	case TypeUnspecified:
