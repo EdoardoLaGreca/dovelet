@@ -21,20 +21,19 @@ type CLArgs struct {
 	flags           *flag.FlagSet
 }
 
-// TODO: rephrase flag descriptions
 // ParseArgs parses the command-line flags from arguments and returns
 // a new pointer of a Detections object..
 func ParseArgs(args []string) *CLArgs {
 	f := flag.NewFlagSet("Detections", flag.ExitOnError)
-	faceDetection := f.Bool("face", false, "This flag specifies the face detection of the feature")
-	landmarkDetection := f.Bool("landmark", false, "This flag specifies the landmark detection of the feature")
-	logoDetection := f.Bool("logo", false, "This flag specifies the logo detection of the feature")
-	labelDetection := f.Bool("label", false, "This flag specifies the label detection of the feature")
-	textDetection := f.Bool("text", false, "This flag specifies the text detection (OCR) of the feature")
-	docTextDetection := f.Bool("doc", false, "This flag specifies the document text detection (OCR) of the feature")
-	safeSearchDetection := f.Bool("safe-search", false, "This flag specifies the safe-search of the feature")
-	imageProperties := f.Bool("image-properties", false, "This flag specifies the image safe-search properties of the feature")
-	languages := f.String("lang", "", "Specify language hints for text detection (only works for -text and -doc). For more than one hint, separate them using commas `,`, for example \"en,it\".")
+	faceDetection := f.Bool("face", false, "Run face detection.")
+	landmarkDetection := f.Bool("landmark", false, "Run landmark detection.")
+	logoDetection := f.Bool("logo", false, "Run logo detection.")
+	labelDetection := f.Bool("label", false, "Run label detection.")
+	textDetection := f.Bool("text", false, "Run big text detection (OCR).")
+	docTextDetection := f.Bool("doc", false, "Run small/document text detection (OCR).")
+	safeSearchDetection := f.Bool("safe-search", false, "Run safe-search detection.")
+	imageProperties := f.Bool("image-properties", false, "Compute image properties.")
+	languages := f.String("lang", "", "Specify language hints for text detection (only works for -text and -doc). For more than one hint, separate them using commas `,` (e.g. \"en,it\").")
 	f.Usage = func() {
 		f.PrintDefaults()
 	}
