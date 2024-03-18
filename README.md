@@ -20,17 +20,27 @@ To generate the credentials file refer to ["Authentication with service accounts
 
 ## The `dovelet` tool
 
+The `dovelet` executable binary is a command-line tool to interface with the Google Cloud Vision API.
+
 ### Installation
 
-The `dovelet` executable binary is a command-line tool to interface with the Google Cloud Vision API.
+#### Using `go install`
 
 ```sh
 go install github.com/EdoardoLaGreca/dovelet/cmd/dovelet@latest
 ```
 
+#### Building from source
+
+```sh
+git clone https://github.com/EdoardoLaGreca/dovelet
+cd dovelet
+go build ./cmd/dovelet # or: go install ./cmd/dovelet
+```
+
 ### Usage
 
-Use the `dovelet` tool to make requests. The syntax is as follows.
+Use the `dovelet` command to make requests. The syntax is as follows.
 
 ```sh
 dovelet -text [ -lang l1,l2,... ] files ...
